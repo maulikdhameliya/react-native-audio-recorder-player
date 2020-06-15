@@ -131,6 +131,7 @@ public class RNAudioRecorderPlayerModule extends ReactContextBaseJavaModule impl
 
   @ReactMethod
   public void stopRecorder(Promise promise) {
+    try {
     if (recordHandler != null) {
       recordHandler.removeCallbacks(this.recorderRunnable);
     }
@@ -144,6 +145,11 @@ public class RNAudioRecorderPlayerModule extends ReactContextBaseJavaModule impl
     mediaRecorder = null;
 
     promise.resolve("file:///" + audioFileURL);
+    } catch(Exception e) {
+      mediaRecorder = null;
+      Log.e(TAG, "stopException:::", e);
+      promise.reject("stopRecord", e.getMessage());
+    }
   }
 
   @ReactMethod
